@@ -2,7 +2,6 @@
 ***Project Title: Part 2 of 2 Grocery Store Inventory System***
 
 <br><br>
-*Output:* 
 
 **Output** 
 
