@@ -3,7 +3,6 @@ package org.example;
 import java.util.HashMap;
 import java.util.*;
 
-
 public class Main {
 
     public static void viewInventory(HashMap<String, Integer> viewInventory) {
@@ -11,89 +10,68 @@ public class Main {
         if(viewInventory.isEmpty()){
             System.out.println("The inventory has no products!");
         }else{
-            System.out.println("Here are the products:");
+            System.out.println("Product you want to check:");
             for(String key : viewInventory.keySet()){
                 System.out.println(key + " = " + viewInventory.get(key) + "pcs");
-
             }
         }
     }
 
-    public static void addProduct(HashMap<String, Integer> addProduct){
+    public static boolean addProduct(HashMap<String, Integer> addProduct, String product, int quantity){
 
-        Scanner scan = new Scanner(System.in);
-
-        System.out.print("Enter Product Name: ");
-        String product = scan.next();
-        System.out.print("Enter Quantity: ");
-        int quantity = scan.nextInt();
-
-        if(product.isEmpty() && quantity < 0){
+        if(quantity < 0 || product.isEmpty() ){
             System.out.println("Invalid Input");
+            return false;
+
         }else{
             addProduct.put(product, quantity);
             System.out.println("Product Added Successfully!");
+            return true;
+
         }
 
     }
 
-    public static void checkProduct(HashMap<String, Integer> checkProduct){
-        Scanner scan = new Scanner(System.in);
+    public static boolean checkProduct(HashMap<String, Integer> checkProduct, String prodChecker){
 
-        System.out.println("Select a product you want to check");
-        String prodChecker = scan.next();
         if(!checkProduct.containsKey(prodChecker)){
-
             System.out.println("The product you wanted to check does not exist");
+            return false;
         }else{
-            System.out.println("Here is the product you want to check: " + prodChecker + " = " + checkProduct.get(prodChecker) + "pcs" );
-
+            System.out.println("Here is the product you want to check: ");
+            System.out.println(prodChecker + " = " + checkProduct.get(prodChecker) + "pcs" );
+            return true;
         }
-
-
 
     }
 
-    private static void updateProduct(HashMap<String, Integer> myInventory) {
+    public static boolean updateProduct(HashMap<String, Integer> updateProduct, String productToUpdate, int quantityToUpdate) {
 
-        Scanner scan = new Scanner(System.in);
+        if(!updateProduct.containsKey(productToUpdate) || quantityToUpdate < 0){
+            System.out.println("Product Not Found or Invalid Quantity");
+            return false;
 
-        System.out.print("Enter Product Name: ");
-        String product = scan.next();
-        System.out.print("Enter New Quantity: ");
-        int quantity = scan.nextInt();
-
-        if(quantity < 0){
-            System.out.println("The quantity you have entered is not valid.");
         }else {
-            myInventory.replace(product, quantity);
+            updateProduct.replace(productToUpdate, quantityToUpdate);
             System.out.println("The product has been updated");
+            return true;
         }
-
 
     }
 
-    public static void removeProduct(HashMap<String, Integer> myInventory) {
+    public static void removeProduct(HashMap<String, Integer> removeProduct, String productToRemove) {
 
-        Scanner scan = new Scanner(System.in);
+        if(!removeProduct.containsKey(productToRemove) || productToRemove.isEmpty()){
 
-        System.out.print("Enter Product Name: ");
-        String product = scan.next();
-        if(product.isEmpty()){
-
-        System.out.println("You have entered Invalid Product Name! ");
+            System.out.println("You have entered Invalid Product Name! ");
         }else{
-            myInventory.remove(product);
+            removeProduct.remove(productToRemove);
             System.out.println("You have successfully deleted a product");
         }
-
     }
     public static void main(String[] args) {
 
         Scanner scan = new Scanner(System.in);
-
-
-
 
         HashMap<String, Integer> myInventory = new HashMap<>();
         int choice = 0;
@@ -115,21 +93,40 @@ public class Main {
                     break;
 
                 case 2:
+                    System.out.print("Enter Product Name: ");
+                    String product = scan.next();
+                    System.out.print("Enter Quantity: ");
+                    int quantity = scan.nextInt();
 
-                    addProduct(myInventory);
+                    boolean addProductResult = addProduct(myInventory, product, quantity);
                     break;
 
                 case 3:
-                    checkProduct(myInventory);
+                    System.out.print("Select a product you want to check: ");
+                    String prodChecker = scan.next();
+                    boolean checkProductResult = checkProduct(myInventory, prodChecker);
+                    if(checkProductResult){
+                        System.out.println("Product Checked SuccessFully ");
+                    }
                     break;
 
                 case 4:
-                    updateProduct(myInventory);
+                    System.out.print("Enter Product Name: ");
+                    String productToUpdate = scan.next();
+                    System.out.print("Enter New Quantity: ");
+                    int quantityToUpdate = scan.nextInt();
+                    boolean updateProductResult = updateProduct(myInventory, productToUpdate, quantityToUpdate);
+
+                    if(!updateProductResult){
+                        System.out.println("Product Not Found");
+                    }
                     break;
 
 
                 case 5:
-                    removeProduct(myInventory);
+                    System.out.print("Enter Product Name: ");
+                    String productToRemove = scan.next();
+                    removeProduct(myInventory, productToRemove);
                     break;
 
                 case 6:
@@ -138,7 +135,7 @@ public class Main {
 
                 default:
                     System.out.println("Please try again with correct input. ");
-
+                    break;
             }
         }
 
